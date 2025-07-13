@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Information Form</title>
+    <title>فرم ببت بطلاعات</title>
     <!-- Using Tailwind CSS for modern, responsive styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- The official Telegram Mini App script -->
@@ -21,7 +21,7 @@
             padding: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Align to top to see content */
             min-height: 100vh;
         }
         /* Style the form container */
@@ -48,25 +48,6 @@
             outline: none;
             border-color: var(--tg-theme-button-color, #3b82f6);
         }
-        /* Style the submit button using Telegram's theme */
-        .submit-btn {
-            width: 100%;
-            padding: 0.875rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            color: var(--tg-theme-button-text-color, #ffffff);
-            background-color: var(--tg-theme-button-color, #3b82f6);
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-        .submit-btn:hover {
-            opacity: 0.9;
-        }
-        .submit-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
         /* Message box for feedback */
         .message-box {
             display: none;
@@ -89,7 +70,7 @@
 
     <div class="form-container">
         <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold">فرم ببت بطلاعات</h1>
+            <h1 class="text-2xl font-bold">Submit Your Information</h1>
             <p class="text-sm" style="color: var(--tg-theme-hint-color, #6b7280);">لطشن سوالات زیر را تاسخ دهید.</p>
         </div>
 
@@ -98,7 +79,7 @@
             <div class="space-y-4">
                 <div>
                     <label for="name" class="block text-sm font-medium mb-1">نان و نان شانودادگی</label>
-                    <input type="text" id="name" name="name" class="form-input" placeholder="شرناز" required>
+                    <input type="text" id="name" name="name" class="form-input" placeholder="مثلن شرناز" required>
                 </div>
                 <div>
                     <label for="email" class="block text-sm font-medium mb-1">بیمیل</label>
@@ -106,15 +87,10 @@
                 </div>
                 <div>
                     <label for="project" class="block text-sm font-medium mb-1">بوضیحات</label>
-                    <textarea id="project" name="project" rows="4" class="form-input" placeholder="اینجا بوضیحاتت را دندیس" required></textarea>
+                    <textarea id="project" name="project" rows="4" class="form-input" placeholder="اینجا بوضیحاتت رو دندیس" required></textarea>
                 </div>
             </div>
-
-            <div class="mt-6">
-                <button type="submit" id="submitBtn" class="submit-btn">
-                    درود بطلاعات
-                </button>
-            </div>
+            <!-- The HTML submit button has been removed. The Telegram Main Button is now the only submit method. -->
         </form>
 
         <!-- Message box for showing success or error messages -->
@@ -126,7 +102,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             const tg = window.Telegram.WebApp;
             const form = document.getElementById('userInfoForm');
-            const submitBtn = document.getElementById('submitBtn');
             const messageBox = document.getElementById('messageBox');
 
             // Your Google Apps Script Web App URL
@@ -138,19 +113,29 @@
             // Expand the app to full height
             tg.expand();
 
-            // Enable the main button in Telegram, which can also submit the form
-            tg.MainButton.text = 'SUBMIT';
+            // Configure and show the main button in Telegram, which will submit the form
+            tg.MainButton.text = 'SUBMIT INFORMATION';
             tg.MainButton.show();
+            
+            // When the main button is clicked, it programmatically submits the form
             tg.MainButton.onClick(() => {
-                form.requestSubmit();
+                // Check if the form is valid before submitting
+                if (form.checkValidity()) {
+                    submitFormData();
+                } else {
+                    // If form is not valid, you can show a hint or just rely on browser validation popups
+                    tg.showAlert('Please fill out all required fields.');
+                }
             });
 
-            form.addEventListener('submit', async (event) => {
+            // We listen for the 'submit' event, which is triggered by MainButton.onClick
+            form.addEventListener('submit', (event) => {
                 event.preventDefault(); // Prevent default browser submission
-                
+                submitFormData();
+            });
+
+            async function submitFormData() {
                 // Disable button to prevent multiple submissions
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Submitting...';
                 tg.MainButton.showProgress();
                 tg.MainButton.disable();
 
@@ -195,12 +180,10 @@
                 } catch (error) {
                     // Show error message if submission fails
                     showMessage(`Error: ${error.message}`, 'error');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Submit Data';
                     tg.MainButton.hideProgress();
                     tg.MainButton.enable();
                 }
-            });
+            }
 
             function showMessage(message, type) {
                 messageBox.textContent = message;
