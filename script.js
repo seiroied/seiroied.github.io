@@ -2,7 +2,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const tg = window.Telegram.WebApp;
   const form = document.getElementById("userInfoForm");
-  const submitBtn = document.getElementById("submitBtn");
   const messageBox = document.getElementById("messageBox");
 
   // Your Google Apps Script Web App URL
@@ -15,19 +14,29 @@ document.addEventListener("DOMContentLoaded", () => {
   // Expand the app to full height
   tg.expand();
 
-  // Enable the main button in Telegram, which can also submit the form
-  tg.MainButton.text = "SUBMIT";
+  // Configure and show the main button in Telegram, which will submit the form
+  tg.MainButton.text = "ببت اطلاعات";
   tg.MainButton.show();
+
+  // When the main button is clicked, it programmatically submits the form
   tg.MainButton.onClick(() => {
-    form.requestSubmit();
+    // Check if the form is valid before submitting
+    if (form.checkValidity()) {
+      submitFormData();
+    } else {
+      // If form is not valid, you can show a hint or just rely on browser validation popups
+      tg.showAlert("Please fill out all required fields.");
+    }
   });
 
-  form.addEventListener("submit", async (event) => {
+  // We listen for the 'submit' event, which is triggered by MainButton.onClick
+  form.addEventListener("submit", (event) => {
     event.preventDefault(); // Prevent default browser submission
+    submitFormData();
+  });
 
+  async function submitFormData() {
     // Disable button to prevent multiple submissions
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Submitting...";
     tg.MainButton.showProgress();
     tg.MainButton.disable();
 
@@ -64,10 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         // Optionally, send a confirmation message back to the bot
         tg.sendData(
-          JSON.stringify({
-            status: "success",
-            message: "Form submitted!",
-          })
+          JSON.stringify({ status: "success", message: "Form submitted!" })
         );
         // Close the Mini App after a short delay
         setTimeout(() => {
@@ -79,12 +85,10 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       // Show error message if submission fails
       showMessage(`Error: ${error.message}`, "error");
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Submit Data";
       tg.MainButton.hideProgress();
       tg.MainButton.enable();
     }
-  });
+  }
 
   function showMessage(message, type) {
     messageBox.textContent = message;
