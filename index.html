@@ -1,196 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>فرم ببت بطلاعات</title>
     <!-- Using Tailwind CSS for modern, responsive styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- The official Telegram Mini App script -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Use a modern font and apply Telegram's theme variables */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Align to top to see content */
-            min-height: 100vh;
-        }
-        /* Style the form container */
-        .form-container {
-            background-color: var(--tg-theme-secondary-bg-color, #f3f4f6);
-            width: 100%;
-            max-width: 500px;
-            margin: 1rem;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        /* Style form elements for consistency */
-        .form-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--tg-theme-hint-color, #d1d5db);
-            border-radius: 8px;
-            background-color: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-            transition: border-color 0.2s;
-        }
-        .form-input:focus {
-            outline: none;
-            border-color: var(--tg-theme-button-color, #3b82f6);
-        }
-        /* Message box for feedback */
-        .message-box {
-            display: none;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
-            text-align: center;
-        }
-        .message-box.success {
-            background-color: #dcfce7;
-            color: #166534;
-        }
-        .message-box.error {
-            background-color: #fee2e2;
-            color: #991b1b;
-        }
-    </style>
-</head>
-<body>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/script.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style></style>
+  </head>
+  <body>
     <div class="form-container">
-        <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold">فرم برود بطلاعات</h1>
-            <p class="text-sm" style="color: var(--tg-theme-hint-color, #6b7280);">لطشن سوالات زیر را تاسخ دهید.</p>
+      <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold">فرم برود بطلاعات</h1>
+        <p class="text-sm" style="color: var(--tg-theme-hint-color, #6b7280)">
+          لطشن سوالات زیر را تاسخ دهید.
+        </p>
+      </div>
+
+      <!-- The form to collect user data -->
+      <form id="userInfoForm">
+        <div class="space-y-4">
+          <div>
+            <label for="name" class="block text-sm font-medium mb-1"
+              >نان و نان شانودادگی</label
+            >
+            <input
+              type="text"
+              id="name"
+              name="name"
+              class="form-input"
+              placeholder="مثلن شرناز"
+              required
+            />
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium mb-1"
+              >بیمیل</label
+            >
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-input"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+          <div>
+            <label for="project" class="block text-sm font-medium mb-1"
+              >بوضیحات</label
+            >
+            <textarea
+              id="project"
+              name="project"
+              rows="4"
+              class="form-input"
+              placeholder="اینجا بوضیحاتت رو دندیس"
+              required
+            ></textarea>
+          </div>
         </div>
+        <!-- The HTML submit button has been removed. The Telegram Main Button is now the only submit method. -->
+      </form>
 
-        <!-- The form to collect user data -->
-        <form id="userInfoForm">
-            <div class="space-y-4">
-                <div>
-                    <label for="name" class="block text-sm font-medium mb-1">نان و نان شانودادگی</label>
-                    <input type="text" id="name" name="name" class="form-input" placeholder="مثلن شرناز" required>
-                </div>
-                <div>
-                    <label for="email" class="block text-sm font-medium mb-1">بیمیل</label>
-                    <input type="email" id="email" name="email" class="form-input" placeholder="you@example.com" required>
-                </div>
-                <div>
-                    <label for="project" class="block text-sm font-medium mb-1">بوضیحات</label>
-                    <textarea id="project" name="project" rows="4" class="form-input" placeholder="اینجا بوضیحاتت رو دندیس" required></textarea>
-                </div>
-            </div>
-            <!-- The HTML submit button has been removed. The Telegram Main Button is now the only submit method. -->
-        </form>
-
-        <!-- Message box for showing success or error messages -->
-        <div id="messageBox" class="message-box"></div>
+      <!-- Message box for showing success or error messages -->
+      <div id="messageBox" class="message-box"></div>
     </div>
 
-    <script>
-        // This is the core script for your Mini App
-        document.addEventListener('DOMContentLoaded', () => {
-            const tg = window.Telegram.WebApp;
-            const form = document.getElementById('userInfoForm');
-            const messageBox = document.getElementById('messageBox');
-
-            // Your Google Apps Script Web App URL
-            const GAS_URL = 'https://script.google.com/macros/s/AKfycbzdCDW2bArm57Irhhe-_gdZIZDkRQrLgey1PNrgH8SySk-64JXUu2nlu-hHvypGGhA/exec';
-
-            // Initialize the Telegram Mini App
-            tg.ready();
-            
-            // Expand the app to full height
-            tg.expand();
-
-            // Configure and show the main button in Telegram, which will submit the form
-            tg.MainButton.text = 'ببت اطلاعات';
-            tg.MainButton.show();
-            
-            // When the main button is clicked, it programmatically submits the form
-            tg.MainButton.onClick(() => {
-                // Check if the form is valid before submitting
-                if (form.checkValidity()) {
-                    submitFormData();
-                } else {
-                    // If form is not valid, you can show a hint or just rely on browser validation popups
-                    tg.showAlert('Please fill out all required fields.');
-                }
-            });
-
-            // We listen for the 'submit' event, which is triggered by MainButton.onClick
-            form.addEventListener('submit', (event) => {
-                event.preventDefault(); // Prevent default browser submission
-                submitFormData();
-            });
-
-            async function submitFormData() {
-                // Disable button to prevent multiple submissions
-                tg.MainButton.showProgress();
-                tg.MainButton.disable();
-
-                // Get form data
-                const formData = new FormData(form);
-                const data = Object.fromEntries(formData.entries());
-                
-                // Add Telegram user info if available
-                if (tg.initDataUnsafe.user) {
-                    data.telegram_user_id = tg.initDataUnsafe.user.id;
-                    data.telegram_username = tg.initDataUnsafe.user.username || 'N/A';
-                    data.telegram_first_name = tg.initDataUnsafe.user.first_name;
-                    data.telegram_last_name = tg.initDataUnsafe.user.last_name || 'N/A';
-                }
-
-                try {
-                    // Send data to Google Apps Script using fetch
-                    const response = await fetch(GAS_URL, {
-                        method: 'POST',
-                        redirect: "follow", // Important for GAS
-                        body: JSON.stringify(data),
-                        headers: {
-                            'Content-Type': 'text/plain;charset=utf-8', // GAS needs text/plain for POST
-                        },
-                    });
-
-                    const result = await response.json();
-
-                    if (result.status === 'success') {
-                        // Show success message
-                        showMessage('Data submitted successfully! This window will close shortly.', 'success');
-                        // Optionally, send a confirmation message back to the bot
-                        tg.sendData(JSON.stringify({status: 'success', message: 'Form submitted!'}));
-                        // Close the Mini App after a short delay
-                        setTimeout(() => {
-                            tg.close();
-                        }, 2000);
-                    } else {
-                        throw new Error(result.message || 'An unknown error occurred.');
-                    }
-
-                } catch (error) {
-                    // Show error message if submission fails
-                    showMessage(`Error: ${error.message}`, 'error');
-                    tg.MainButton.hideProgress();
-                    tg.MainButton.enable();
-                }
-            }
-
-            function showMessage(message, type) {
-                messageBox.textContent = message;
-                messageBox.className = `message-box ${type}`;
-                messageBox.style.display = 'block';
-            }
-        });
-    </script>
-</body>
+    <script></script>
+  </body>
 </html>
