@@ -1,0 +1,71 @@
+/* Use a modern font and apply Telegram's theme variables */
+body {
+  font-family: "Inter", sans-serif;
+  background-color: var(--tg-theme-bg-color, #ffffff);
+  color: var(--tg-theme-text-color, #000000);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+/* Style the form container */
+.form-container {
+  background-color: var(--tg-theme-secondary-bg-color, #f3f4f6);
+  width: 100%;
+  max-width: 500px;
+  margin: 1rem;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+/* Style form elements for consistency */
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--tg-theme-hint-color, #d1d5db);
+  border-radius: 8px;
+  background-color: var(--tg-theme-bg-color, #ffffff);
+  color: var(--tg-theme-text-color, #000000);
+  transition: border-color 0.2s;
+}
+.form-input:focus {
+  outline: none;
+  border-color: var(--tg-theme-button-color, #3b82f6);
+}
+/* Style the submit button using Telegram's theme */
+.submit-btn {
+  width: 100%;
+  padding: 0.875rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  color: var(--tg-theme-button-text-color, #ffffff);
+  background-color: var(--tg-theme-button-color, #3b82f6);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.submit-btn:hover {
+  opacity: 0.9;
+}
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+/* Message box for feedback */
+.message-box {
+  display: none;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  text-align: center;
+}
+.message-box.success {
+  background-color: #dcfce7;
+  color: #166534;
+}
+.message-box.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
