@@ -6,7 +6,7 @@ declare const Telegram: any;
 const tg = Telegram?.WebApp || { initDataUnsafe: { user: { first_name: "Guest", id: "test_id" } } };
 
 // Secret key (must match the backend)
-const SECRET_KEY = "your_secret_key_here";
+const SECRET_KEY = "6016095162200085172159145346071766614515104116437466485023771751069851876241876813082537344662853442";
 
 // Define questionnaire structure
 const questionnaires: { [key: string]: { name: string; label: string; type: string; validate: (value: string) => boolean }[] } = {
