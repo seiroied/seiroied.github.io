@@ -18,10 +18,7 @@
             --tg-button-text: var(--tg-theme-button-text-color, #ffffff);
             --tg-secondary-bg: var(--tg-theme-secondary-bg-color, #f3f4f6);
         }
-        html, body {
-            height: 100%;
-            overflow: hidden;
-        }
+        html, body { height: 100%; overflow: hidden; }
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--tg-bg);
@@ -51,18 +48,9 @@
             transform: translateX(100%);
             overflow-y: auto;
         }
-        .view.active {
-            transform: translateX(0);
-        }
-        .view.exit-left {
-            transform: translateX(-100%);
-        }
-        .view-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
+        .view.active { transform: translateX(0); }
+        .view.exit-left { transform: translateX(-100%); }
+        .view-title { font-size: 1.5rem; font-weight: 700; text-align: center; }
         .menu-button {
             width: 100%;
             padding: 1rem;
@@ -85,44 +73,36 @@
             transition: border-color 0.2s;
             font-size: 1rem;
         }
-        .form-input:focus {
-            outline: none;
-            border-color: var(--tg-button);
+        .form-input:focus { outline: none; border-color: var(--tg-button); }
+        .progress-bar-container { width: 100%; background-color: var(--tg-secondary-bg); border-radius: 99px; margin-bottom: 1rem; }
+        .progress-bar { height: 8px; width: 0%; background-color: var(--tg-button); border-radius: 99px; transition: width 0.3s ease-in-out; }
+        .question-container { text-align: center; }
+        .question-label { font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; animation: fadeIn 0.5s ease-in-out; }
+        .next-button { margin-top: 1.5rem; display: inline-block; padding: 0.75rem 2rem; }
+        .back-button {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--tg-text);
+            font-size: 1.5rem;
+            line-height: 1;
+            padding: 0.5rem;
         }
-        .progress-bar-container {
-            width: 100%;
-            background-color: var(--tg-secondary-bg);
-            border-radius: 99px;
-            margin-bottom: 1rem;
-        }
-        .progress-bar {
-            height: 8px;
-            width: 0%;
-            background-color: var(--tg-button);
-            border-radius: 99px;
-            transition: width 0.3s ease-in-out;
-        }
-        .question-container {
-            text-align: center;
-        }
-        .question-label {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-        }
-        .next-button {
-            margin-top: 1.5rem;
-            display: inline-block;
-            padding: 0.75rem 2rem;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
     <div id="app-container">
         <!-- Home Screen View -->
         <div id="home-view" class="view active">
-            <h1 class="view-title mt-12">What do you like to order?</h1>
-            <div class="space-y-4 mt-8">
+            <div class="text-center mt-12">
+                <h1 id="welcome-title" class="view-title">Welcome!</h1>
+                <p class="mb-8" style="color: var(--tg-hint);">What do you like to order?</p>
+            </div>
+            <div class="space-y-4">
                 <button class="menu-button" data-category="website">Website</button>
                 <button class="menu-button" data-category="Telegram-bot">Telegram Bot</button>
                 <button class="menu-button" data-category="Logo">Logo Design</button>
@@ -140,7 +120,6 @@
             const tg = window.Telegram.WebApp;
             const GAS_URL = 'https://script.google.com/macros/s/AKfycbzdCDW2bArm57Irhhe-_gdZIZDkRQrLgey1PNrgH8SySk-64JXUu2nlu-hHvypGGhA/exec';
             
-            // --- QUESTIONNAIRE DATA ---
             const questionnaires = {
                 website: [
                     { name: 'projectName', label: 'What is the name of your business or project?', type: 'text' },
@@ -157,7 +136,7 @@
                     { name: 'userInteraction', label: 'How should the bot interact with users? (e.g., Buttons, forms, simple text)', type: 'textarea'},
                     { name: 'integrationNeeds', label: 'Does it need to connect to other websites or APIs?', type: 'text'}
                 ],
-                'Logo': [
+                Logo: [
                     { name: 'companyName', label: 'What is the exact name to appear in the logo?', type: 'text'},
                     { name: 'tagline', label: 'Is there a tagline to include?', type: 'text'},
                     { name: 'stylePreference', label: 'Describe the desired style (e.g., modern, classic, minimalist, fun).', type: 'textarea'},
@@ -175,72 +154,77 @@
             tg.expand();
             tg.MainButton.hide();
 
-            function navigateTo(viewId) {
+            // Personalize Welcome Message
+            const welcomeTitle = document.getElementById('welcome-title');
+            if (tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) {
+                welcomeTitle.textContent = `Welcome, ${tg.initDataUnsafe.user.first_name}!`;
+            }
+
+            function navigateTo(viewId, direction = 'forward') {
                 const currentViewEl = document.getElementById(currentView);
                 const nextViewEl = document.getElementById(viewId);
                 
                 if (currentViewEl && nextViewEl) {
-                    currentViewEl.classList.add('exit-left');
-                    nextViewEl.classList.remove('exit-left');
+                    if (direction === 'forward') {
+                        currentViewEl.classList.add('exit-left');
+                        nextViewEl.classList.remove('exit-left');
+                    } else { // backward
+                        nextViewEl.classList.add('exit-left');
+                        // A trick to trigger animation: remove class, reflow, add class
+                        requestAnimationFrame(() => {
+                           nextViewEl.classList.remove('exit-left');
+                        });
+                        currentViewEl.classList.remove('active');
+                    }
                     nextViewEl.classList.add('active');
-                    setTimeout(() => currentViewEl.classList.remove('active'), 350);
+                    if(direction === 'forward') {
+                        setTimeout(() => currentViewEl.classList.remove('active'), 350);
+                    }
                 }
                 currentView = viewId;
             }
 
             function startQuestionnaire(category) {
                 currentQuestionnaire = questionnaires[category];
-                if (!currentQuestionnaire) {
-                    tg.showAlert(`The questionnaire for "${category}" is not yet available.`);
-                    return;
-                }
-                answers = { category: category }; // Reset answers
+                answers = { category: category };
                 currentQuestionIndex = 0;
                 renderQuestion();
-                navigateTo('questionnaire-view');
+                navigateTo('questionnaire-view', 'forward');
+            }
+
+            function goHome() {
+                navigateTo('home-view', 'backward');
+                tg.MainButton.hide();
             }
 
             function renderQuestion() {
                 const qView = document.getElementById('questionnaire-view');
-                if (!currentQuestionnaire) return;
-
                 const question = currentQuestionnaire[currentQuestionIndex];
                 const totalQuestions = currentQuestionnaire.length;
                 const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
 
-                let inputHtml;
-                if (question.type === 'textarea') {
-                    inputHtml = `<textarea id="q-input" name="${question.name}" class="form-input" rows="4" required></textarea>`;
-                } else {
-                    inputHtml = `<input type="${question.type}" id="q-input" name="${question.name}" class="form-input" required>`;
-                }
+                let inputHtml = question.type === 'textarea'
+                    ? `<textarea id="q-input" name="${question.name}" class="form-input" rows="4" required></textarea>`
+                    : `<input type="${question.type}" id="q-input" name="${question.name}" class="form-input" required>`;
 
                 qView.innerHTML = `
-                    <div class="pt-4">
+                    <button class="back-button" id="back-btn">‹</button>
+                    <div class="pt-12">
                         <p class="text-sm text-center" style="color: var(--tg-hint);">Step ${currentQuestionIndex + 1} of ${totalQuestions}</p>
                         <div class="progress-bar-container"><div class="progress-bar" style="width: ${progress}%;"></div></div>
                         <div class="question-container mt-8">
                             <label for="q-input" class="question-label">${question.label}</label>
-                            <form id="question-form">
-                                ${inputHtml}
-                                <button type="submit" class="menu-button next-button">Next →</button>
-                            </form>
+                            <form id="question-form">${inputHtml}<button type="submit" class="menu-button next-button">Next →</button></form>
                         </div>
                     </div>
                 `;
 
-                const form = document.getElementById('question-form');
-                const input = document.getElementById('q-input');
-                input.focus();
+                document.getElementById('back-btn').addEventListener('click', goHome);
+                document.getElementById('question-form').addEventListener('submit', e => { e.preventDefault(); handleNext(); });
+                document.getElementById('q-input').focus();
 
-                form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    handleNext();
-                });
-
-                // Configure Telegram Main Button for the last question
                 if (currentQuestionIndex === totalQuestions - 1) {
-                    document.querySelector('.next-button').remove(); // Remove HTML next button
+                    document.querySelector('.next-button').remove();
                     tg.MainButton.text = 'SUBMIT ANSWERS';
                     tg.MainButton.show();
                 } else {
@@ -250,27 +234,26 @@
 
             function handleNext() {
                 const input = document.getElementById('q-input');
-                if (!input.value) {
-                    tg.showAlert('Please provide an answer.');
-                    return;
-                }
+                if (!input.value) { tg.showAlert('Please provide an answer.'); return; }
                 answers[input.name] = input.value;
                 currentQuestionIndex++;
-
-                if (currentQuestionIndex < currentQuestionnaire.length) {
-                    renderQuestion();
-                }
+                if (currentQuestionIndex < currentQuestionnaire.length) renderQuestion();
             }
             
             async function submitData() {
-                // Handle submission for the last question
                 const lastInput = document.getElementById('q-input');
-                if (lastInput && !answers[lastInput.name]) {
-                   answers[lastInput.name] = lastInput.value;
-                }
+                if (lastInput && !answers[lastInput.name]) answers[lastInput.name] = lastInput.value;
+                if (!lastInput.value) { tg.showAlert('Please provide an answer for the final question.'); return; }
 
                 tg.MainButton.showProgress();
                 tg.MainButton.disable();
+
+                // Add user data for the confirmation message
+                if (tg.initDataUnsafe.user) {
+                    answers.telegram_user_id = tg.initDataUnsafe.user.id;
+                    answers.telegram_username = tg.initDataUnsafe.user.username || 'N/A';
+                    answers.telegram_first_name = tg.initDataUnsafe.user.first_name || 'User';
+                }
 
                 try {
                     const response = await fetch(GAS_URL, {
@@ -281,9 +264,9 @@
                     });
                     const result = await response.json();
                     if (result.status !== 'success') throw new Error(result.message);
-
-                    tg.showAlert('Your information has been submitted successfully!');
-                    setTimeout(() => tg.close(), 1500);
+                    
+                    // The app will close after the bot sends the confirmation message.
+                    tg.close();
 
                 } catch (error) {
                     tg.showAlert(`An error occurred: ${error.message}`);
@@ -293,11 +276,8 @@
             }
 
             document.querySelectorAll('.menu-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    startQuestionnaire(button.dataset.category);
-                });
+                button.addEventListener('click', () => startQuestionnaire(button.dataset.category));
             });
-
             tg.MainButton.onClick(submitData);
         });
     </script>
