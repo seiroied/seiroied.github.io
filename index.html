@@ -1,82 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>فرم ببت بطلاعات</title>
-    <!-- Using Tailwind CSS for modern, responsive styling -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Service Questionnaire</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- The official Telegram Mini App script -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="stylesheet" href="/style.css" />
-    <script src="/script.js"></script>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style></style>
-  </head>
-  <body>
-    <div class="form-container">
-      <div class="text-center mb-6">
-        <h1 class="text-2xl font-bold">فرم برود بطلاعات</h1>
-        <p class="text-sm" style="color: var(--tg-theme-hint-color, #6b7280)">
-          لطشن سوالات زیر را تاسخ دهید.
-        </p>
-      </div>
-
-      <!-- The form to collect user data -->
-      <form id="userInfoForm">
-        <div class="space-y-4">
-          <div>
-            <label for="name" class="block text-sm font-medium mb-1"
-              >نان و نان شانودادگی</label
-            >
-            <input
-              type="text"
-              id="name"
-              name="name"
-              class="form-input"
-              placeholder="مثلن شرناز"
-              required
-            />
-          </div>
-          <div>
-            <label for="email" class="block text-sm font-medium mb-1"
-              >بیمیل</label
-            >
-            <input
-              type="email"
-              id="email"
-              name="email"
-              class="form-input"
-              placeholder="you@example.com"
-              required
-            />
-          </div>
-          <div>
-            <label for="project" class="block text-sm font-medium mb-1"
-              >بوضیحات</label
-            >
-            <textarea
-              id="project"
-              name="project"
-              rows="4"
-              class="form-input"
-              placeholder="اینجا بوضیحاتت رو دندیس"
-              required
-            ></textarea>
-          </div>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --tg-bg: var(--tg-theme-bg-color, #ffffff);
+            --tg-text: var(--tg-theme-text-color, #000000);
+            --tg-hint: var(--tg-theme-hint-color, #9ca3af);
+            --tg-button: var(--tg-theme-button-color, #3b82f6);
+            --tg-button-text: var(--tg-theme-button-text-color, #ffffff);
+            --tg-secondary-bg: var(--tg-theme-secondary-bg-color, #f3f4f6);
+        }
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--tg-bg);
+            color: var(--tg-text);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #app-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 600px;
+            overflow: hidden;
+        }
+        .view {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 1.5rem;
+            box-sizing: border-box;
+            background-color: var(--tg-bg);
+            transition: transform 0.35s ease-in-out;
+            transform: translateX(100%);
+            overflow-y: auto;
+        }
+        .view.active {
+            transform: translateX(0);
+        }
+        .view.exit-left {
+            transform: translateX(-100%);
+        }
+        .view-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .view-subtitle {
+            text-align: center;
+            color: var(--tg-hint);
+            margin-bottom: 2rem;
+        }
+        .menu-button {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            background-color: var(--tg-button);
+            color: var(--tg-button-text);
+            transition: opacity 0.2s;
+        }
+        .menu-button:hover {
+            opacity: 0.9;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--tg-hint);
+            border-radius: 8px;
+            background-color: var(--tg-secondary-bg);
+            color: var(--tg-text);
+            transition: border-color 0.2s;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--tg-button);
+        }
+        .back-button {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--tg-text);
+        }
+        .message-box {
+            display: none;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .message-box.success { background-color: #dcfce7; color: #166534; }
+        .message-box.error { background-color: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body>
+    <div id="app-container">
+        <!-- Home Screen View -->
+        <div id="home-view" class="view active">
+            <h1 class="view-title mt-12">What do you like to order?</h1>
+            <div class="space-y-4 mt-8">
+                <button class="menu-button" data-target="website-view">Website</button>
+                <button class="menu-button" data-target="telegram-bot-view">Telegram Bot</button>
+                <button class="menu-button" data-target="logo-view">Logo Design</button>
+            </div>
         </div>
-        <!-- The HTML submit button has been removed. The Telegram Main Button is now the only submit method. -->
-      </form>
 
-      <!-- Message box for showing success or error messages -->
-      <div id="messageBox" class="message-box"></div>
+        <!-- Website Questionnaire View -->
+        <div id="website-view" class="view">
+            <button class="back-button" data-target="home-view">← Back</button>
+            <h1 class="view-title">Website Questionnaire</h1>
+            <p class="view-subtitle">Please provide details about your website needs.</p>
+            <form id="website-form" class="space-y-4">
+                <input type="hidden" name="category" value="website">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Business Name</label>
+                    <input type="text" name="businessName" class="form-input" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Target Audience</label>
+                    <input type="text" name="targetAudience" class="form-input" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Required Features (e.g., e-commerce, blog)</label>
+                    <textarea name="features" rows="4" class="form-input" required></textarea>
+                </div>
+            </form>
+        </div>
+
+        <!-- Telegram Bot Questionnaire View -->
+        <div id="telegram-bot-view" class="view">
+            <button class="back-button" data-target="home-view">← Back</button>
+            <h1 class="view-title">Telegram Bot Questionnaire</h1>
+            <p class="view-subtitle">Help us understand your bot requirements.</p>
+            <form id="telegram-bot-form" class="space-y-4">
+                <input type="hidden" name="category" value="Telegram-bot">
+                <div>
+                    <label class="block text-sm font-medium mb-1">What is the main purpose of the bot?</label>
+                    <input type="text" name="botPurpose" class="form-input" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">List some key commands (e.g., /start, /help)</label>
+                    <input type="text" name="keyCommands" class="form-input" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Does it need to integrate with other services?</label>
+                    <textarea name="integrationNeeds" rows="4" class="form-input" required></textarea>
+                </div>
+            </form>
+        </div>
+
+        <!-- Logo Design Questionnaire View -->
+        <div id="logo-view" class="view">
+            <button class="back-button" data-target="home-view">← Back</button>
+            <h1 class="view-title">Logo Design Questionnaire</h1>
+            <p class="view-subtitle">Describe your vision for the perfect logo.</p>
+            <form id="logo-form" class="space-y-4">
+                <input type="hidden" name="category" value="Logo">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Company Name / Brand Name</label>
+                    <input type="text" name="companyName" class="form-input" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Preferred Colors</label>
+                    <input type="text" name="brandColors" class="form-input" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Style Preference (e.g., modern, classic, minimalist)</label>
+                    <textarea name="stylePreference" rows="4" class="form-input" required></textarea>
+                </div>
+            </form>
+        </div>
+        
+        <!-- This is a placeholder for messages, not a view -->
+        <div id="messageBox" class="message-box"></div>
     </div>
 
-    <script></script>
-  </body>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tg = window.Telegram.WebApp;
+            const GAS_URL = 'https://script.google.com/macros/s/AKfycbzdCDW2bArm57Irhhe-_gdZIZDkRQrLgey1PNrgH8SySk-64JXUu2nlu-hHvypGGhA/exec';
+            
+            let currentView = 'home-view';
+            let activeForm = null;
+
+            tg.ready();
+            tg.expand();
+
+            function navigateTo(viewId) {
+                const currentViewEl = document.getElementById(currentView);
+                const nextViewEl = document.getElementById(viewId);
+                
+                if (currentViewEl && nextViewEl) {
+                    currentViewEl.classList.add('exit-left');
+                    nextViewEl.classList.remove('exit-left');
+                    nextViewEl.classList.add('active');
+
+                    setTimeout(() => {
+                        currentViewEl.classList.remove('active');
+                    }, 350);
+                }
+                
+                currentView = viewId;
+                activeForm = document.querySelector(`#${viewId} form`);
+
+                if (viewId === 'home-view') {
+                    tg.MainButton.hide();
+                } else {
+                    tg.MainButton.text = 'SUBMIT';
+                    tg.MainButton.show();
+                }
+            }
+
+            document.querySelectorAll('.menu-button, .back-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    navigateTo(button.dataset.target);
+                });
+            });
+
+            async function submitFormData() {
+                if (!activeForm) return;
+
+                if (!activeForm.checkValidity()) {
+                    tg.showAlert('Please fill out all fields before submitting.');
+                    return;
+                }
+
+                tg.MainButton.showProgress();
+                tg.MainButton.disable();
+
+                const formData = new FormData(activeForm);
+                const data = Object.fromEntries(formData.entries());
+
+                if (tg.initDataUnsafe.user) {
+                    data.telegram_user_id = tg.initDataUnsafe.user.id;
+                    data.telegram_username = tg.initDataUnsafe.user.username || 'N/A';
+                }
+
+                try {
+                    const response = await fetch(GAS_URL, {
+                        method: 'POST',
+                        redirect: "follow",
+                        body: JSON.stringify(data),
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    });
+                    const result = await response.json();
+                    if (result.status !== 'success') throw new Error(result.message);
+
+                    tg.showAlert('Your information has been submitted successfully!');
+                    setTimeout(() => tg.close(), 1500);
+
+                } catch (error) {
+                    tg.showAlert(`An error occurred: ${error.message}`);
+                    tg.MainButton.hideProgress();
+                    tg.MainButton.enable();
+                }
+            }
+
+            tg.MainButton.onClick(submitFormData);
+        });
+    </script>
+</body>
 </html>
