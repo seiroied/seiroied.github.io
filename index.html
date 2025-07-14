@@ -118,30 +118,31 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const tg = window.Telegram.WebApp;
-            const GAS_URL = 'https://script.google.com/macros/s/AKfycbzdCDW2bArm57Irhhe-_gdZIZDkRQrLgey1PNrgH8SySk-64JXUu2nlu-hHvypGGhA/exec';
-            
+            const GAS_URL = 'https://script.google.com/macros/s/AKfycbzdCDW2bArm57Irhhe-_gdZIZDkRQrLgey1PNrgH8SySk-64JXUu2nlu-hHvypGGhA/exec'; // Replace with your Web App URL
+            const SECRET_KEY = 'your_secret_key'; // Must match the Apps Script SECRET_KEY
+
             const questionnaires = {
                 website: [
-                    { name: 'projectName', label: 'What is the name of your business or project?', type: 'text' },
-                    { name: 'projectDescription', label: 'Briefly describe what your business does.', type: 'textarea' },
-                    { name: 'targetAudience', label: 'Who is your target audience?', type: 'text' },
-                    { name: 'primaryGoal', label: 'What is the main goal of this website? (e.g., Sell products, generate leads)', type: 'text' },
-                    { name: 'brandingInfo', label: 'Do you have an existing logo or brand colors?', type: 'text' },
-                    { name: 'requiredFeatures', label: 'Any specific features needed? (e.g., Blog, E-commerce)', type: 'textarea' }
+                    { name: 'projectName', label: 'What is the name of your business or project?', type: 'text', validate: value => value.length >= 3 },
+                    { name: 'projectDescription', label: 'Briefly describe what your business does.', type: 'textarea', validate: value => value.length >= 10 },
+                    { name: 'targetAudience', label: 'Who is your target audience?', type: 'text', validate: value => value.length >= 3 },
+                    { name: 'primaryGoal', label: 'What is the main goal of this website? (e.g., Sell products, generate leads)', type: 'text', validate: value => value.length >= 5 },
+                    { name: 'brandingInfo', label: 'Do you have an existing logo or brand colors?', type: 'text', validate: value => value.length >= 3 },
+                    { name: 'requiredFeatures', label: 'Any specific features needed? (e.g., Blog, E-commerce)', type: 'textarea', validate: value => value.length >= 10 }
                 ],
                 'Telegram-bot': [
-                    { name: 'botPurpose', label: 'What is the main purpose of your bot?', type: 'textarea'},
-                    { name: 'botName', label: 'Do you have a preferred name or username for the bot?', type: 'text'},
-                    { name: 'keyCommands', label: 'List some key commands you envision (e.g., /start, /help, /data).', type: 'text'},
-                    { name: 'userInteraction', label: 'How should the bot interact with users? (e.g., Buttons, forms, simple text)', type: 'textarea'},
-                    { name: 'integrationNeeds', label: 'Does it need to connect to other websites or APIs?', type: 'text'}
+                    { name: 'botPurpose', label: 'What is the main purpose of your bot?', type: 'textarea', validate: value => value.length >= 10 },
+                    { name: 'botName', label: 'Do you have a preferred name or username for the bot?', type: 'text', validate: value => value.length >= 3 },
+                    { name: 'keyCommands', label: 'List some key commands you envision (e.g., /start, /help, /data).', type: 'text', validate: value => value.length >= 5 },
+                    { name: 'userInteraction', label: 'How should the bot interact with users? (e.g., Buttons, forms, simple text)', type: 'textarea', validate: value => value.length >= 10 },
+                    { name: 'integrationNeeds', label: 'Does it need to connect to other websites or APIs?', type: 'text', validate: value => value.length >= 3 }
                 ],
                 Logo: [
-                    { name: 'companyName', label: 'What is the exact name to appear in the logo?', type: 'text'},
-                    { name: 'tagline', label: 'Is there a tagline to include?', type: 'text'},
-                    { name: 'stylePreference', label: 'Describe the desired style (e.g., modern, classic, minimalist, fun).', type: 'textarea'},
-                    { name: 'brandColors', label: 'What are your preferred brand colors?', type: 'text'},
-                    { name: 'inspiration', label: 'Are there any existing logos you admire? Why?', type: 'textarea'}
+                    { name: 'companyName', label: 'What is the exact name to appear in the logo?', type: 'text', validate: value => value.length >= 3 },
+                    { name: 'tagline', label: 'Is there a tagline to include?', type: 'text', validate: value => value.length >= 0 }, // Optional
+                    { name: 'stylePreference', label: 'Describe the desired style (e.g., modern, classic, minimalist, fun).', type: 'textarea', validate: value => value.length >= 10 },
+                    { name: 'brandColors', label: 'What are your preferred brand colors?', type: 'text', validate: value => value.length >= 3 },
+                    { name: 'inspiration', label: 'Are there any existing logos you admire? Why?', type: 'textarea', validate: value => value.length >= 10 }
                 ]
             };
 
@@ -163,21 +164,17 @@
             function navigateTo(viewId, direction = 'forward') {
                 const currentViewEl = document.getElementById(currentView);
                 const nextViewEl = document.getElementById(viewId);
-                
                 if (currentViewEl && nextViewEl) {
                     if (direction === 'forward') {
                         currentViewEl.classList.add('exit-left');
                         nextViewEl.classList.remove('exit-left');
-                    } else { // backward
+                    } else {
                         nextViewEl.classList.add('exit-left');
-                        // A trick to trigger animation: remove class, reflow, add class
-                        requestAnimationFrame(() => {
-                           nextViewEl.classList.remove('exit-left');
-                        });
+                        requestAnimationFrame(() => nextViewEl.classList.remove('exit-left'));
                         currentViewEl.classList.remove('active');
                     }
                     nextViewEl.classList.add('active');
-                    if(direction === 'forward') {
+                    if (direction === 'forward') {
                         setTimeout(() => currentViewEl.classList.remove('active'), 350);
                     }
                 }
@@ -203,9 +200,9 @@
                 const totalQuestions = currentQuestionnaire.length;
                 const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
 
-                let inputHtml = question.type === 'textarea'
-                    ? `<textarea id="q-input" name="${question.name}" class="form-input" rows="4" required></textarea>`
-                    : `<input type="${question.type}" id="q-input" name="${question.name}" class="form-input" required>`;
+                const inputHtml = question.type === 'textarea'
+                    ? `<textarea id="q-input" name="${question.name}" class="form-input" rows="4" required>${answers[question.name] || ''}</textarea>`
+                    : `<input type="${question.type}" id="q-input" name="${question.name}" class="form-input" value="${answers[question.name] || ''}" required>`;
 
                 qView.innerHTML = `
                     <button class="back-button" id="back-btn">‹</button>
@@ -214,17 +211,20 @@
                         <div class="progress-bar-container"><div class="progress-bar" style="width: ${progress}%;"></div></div>
                         <div class="question-container mt-8">
                             <label for="q-input" class="question-label">${question.label}</label>
-                            <form id="question-form">${inputHtml}<button type="submit" class="menu-button next-button">Next →</button></form>
+                            <form id="question-form">${inputHtml}
+                                ${currentQuestionIndex > 0 ? '<button type="button" id="prev-btn" class="menu-button next-button mr-2">Previous</button>' : ''}
+                                <button type="submit" class="menu-button next-button">${currentQuestionIndex === totalQuestions - 1 ? 'Review' : 'Next →'}</button>
+                            </form>
                         </div>
                     </div>
                 `;
 
                 document.getElementById('back-btn').addEventListener('click', goHome);
                 document.getElementById('question-form').addEventListener('submit', e => { e.preventDefault(); handleNext(); });
+                if (currentQuestionIndex > 0) document.getElementById('prev-btn').addEventListener('click', () => { currentQuestionIndex--; renderQuestion(); });
                 document.getElementById('q-input').focus();
 
                 if (currentQuestionIndex === totalQuestions - 1) {
-                    document.querySelector('.next-button').remove();
                     tg.MainButton.text = 'SUBMIT ANSWERS';
                     tg.MainButton.show();
                 } else {
@@ -234,26 +234,46 @@
 
             function handleNext() {
                 const input = document.getElementById('q-input');
-                if (!input.value) { tg.showAlert('Please provide an answer.'); return; }
+                const question = currentQuestionnaire[currentQuestionIndex];
+                if (!input.value || (question.validate && !question.validate(input.value))) {
+                    tg.showAlert('Please provide a valid answer (e.g., minimum 3 characters for text, 10 for descriptions).');
+                    return;
+                }
                 answers[input.name] = input.value;
                 currentQuestionIndex++;
-                if (currentQuestionIndex < currentQuestionnaire.length) renderQuestion();
+                if (currentQuestionIndex < currentQuestionnaire.length) {
+                    renderQuestion();
+                } else {
+                    renderReview();
+                }
             }
-            
+
+            function renderReview() {
+                const qView = document.getElementById('questionnaire-view');
+                let reviewHtml = '<h2 class="view-title">Review Your Answers</h2><ul class="space-y-4">';
+                currentQuestionnaire.forEach(q => {
+                    reviewHtml += `<li><strong>${q.label}</strong><br>${answers[q.name]}</li>`;
+                });
+                reviewHtml += '</ul>';
+                qView.innerHTML = `
+                    <button class="back-button" id="back-btn">‹</button>
+                    <div class="pt-12">${reviewHtml}</div>
+                `;
+                document.getElementById('back-btn').addEventListener('click', () => { currentQuestionIndex--; renderQuestion(); });
+                tg.MainButton.text = 'SUBMIT ANSWERS';
+                tg.MainButton.show();
+            }
+
             async function submitData() {
-                const lastInput = document.getElementById('q-input');
-                if (lastInput && !answers[lastInput.name]) answers[lastInput.name] = lastInput.value;
-                if (!lastInput.value) { tg.showAlert('Please provide an answer for the final question.'); return; }
+                const userId = tg.initDataUnsafe.user.id;
+                const token = btoa(userId + ":" + SECRET_KEY);
+                answers.token = token;
+                answers.telegram_user_id = userId;
+                answers.telegram_username = tg.initDataUnsafe.user.username || 'N/A';
+                answers.telegram_first_name = tg.initDataUnsafe.user.first_name || 'User';
 
                 tg.MainButton.showProgress();
                 tg.MainButton.disable();
-
-                // Add user data for the confirmation message
-                if (tg.initDataUnsafe.user) {
-                    answers.telegram_user_id = tg.initDataUnsafe.user.id;
-                    answers.telegram_username = tg.initDataUnsafe.user.username || 'N/A';
-                    answers.telegram_first_name = tg.initDataUnsafe.user.first_name || 'User';
-                }
 
                 try {
                     const response = await fetch(GAS_URL, {
@@ -264,10 +284,7 @@
                     });
                     const result = await response.json();
                     if (result.status !== 'success') throw new Error(result.message);
-                    
-                    // The app will close after the bot sends the confirmation message.
-                    tg.close();
-
+                    tg.close(); // Closes after successful submission
                 } catch (error) {
                     tg.showAlert(`An error occurred: ${error.message}`);
                     tg.MainButton.hideProgress();
