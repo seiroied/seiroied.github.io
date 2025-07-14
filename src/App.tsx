@@ -130,11 +130,11 @@ const App: React.FC = () => {
     };
 
     try {
-      const response = await fetch("https://script.google.com/macros/s/your-web-app-id/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch("https://script.google.com/macros/s/AKfycbzdCDW2bArm57Irhhe-_gdZIZDkRQrLgey1PNrgH8SySk-64JXUu2nlu-hHvypGGhA/exec", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(payload),
+});
       const result = await response.json();
       if (result.status === "success") {
         tg.showAlert("Submission successful! We’ll get back to you soon.");
