@@ -61,11 +61,6 @@
             font-size: 1.5rem;
             font-weight: 700;
             text-align: center;
-            margin-bottom: 0.5rem;
-        }
-        .view-subtitle {
-            text-align: center;
-            color: var(--tg-hint);
             margin-bottom: 2rem;
         }
         .menu-button {
@@ -80,9 +75,6 @@
             color: var(--tg-button-text);
             transition: opacity 0.2s;
         }
-        .menu-button:hover {
-            opacity: 0.9;
-        }
         .form-input {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -91,29 +83,38 @@
             background-color: var(--tg-secondary-bg);
             color: var(--tg-text);
             transition: border-color 0.2s;
+            font-size: 1rem;
         }
         .form-input:focus {
             outline: none;
             border-color: var(--tg-button);
         }
-        .back-button {
-            position: absolute;
-            top: 1.5rem;
-            left: 1.5rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--tg-text);
+        .progress-bar-container {
+            width: 100%;
+            background-color: var(--tg-secondary-bg);
+            border-radius: 99px;
+            margin-bottom: 1rem;
         }
-        .message-box {
-            display: none;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
+        .progress-bar {
+            height: 8px;
+            width: 0%;
+            background-color: var(--tg-button);
+            border-radius: 99px;
+            transition: width 0.3s ease-in-out;
+        }
+        .question-container {
             text-align: center;
         }
-        .message-box.success { background-color: #dcfce7; color: #166534; }
-        .message-box.error { background-color: #fee2e2; color: #991b1b; }
+        .question-label {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        .next-button {
+            margin-top: 1.5rem;
+            display: inline-block;
+            padding: 0.75rem 2rem;
+        }
     </style>
 </head>
 <body>
@@ -122,80 +123,19 @@
         <div id="home-view" class="view active">
             <h1 class="view-title mt-12">What do you like to order?</h1>
             <div class="space-y-4 mt-8">
-                <button class="menu-button" data-target="website-view">Website</button>
-                <button class="menu-button" data-target="telegram-bot-view">Telegram Bot</button>
-                <button class="menu-button" data-target="logo-view">Logo Design</button>
+                <button class="menu-button" data-category="website">Website</button>
+                <button class="menu-button" data-category="Telegram-bot">Telegram Bot</button>
+                <button class="menu-button" data-category="Logo">Logo Design</button>
             </div>
         </div>
 
-        <!-- Website Questionnaire View -->
-        <div id="website-view" class="view">
-            <button class="back-button" data-target="home-view">← Back</button>
-            <h1 class="view-title">Website Questionnaire</h1>
-            <p class="view-subtitle">Please provide details about your website needs.</p>
-            <form id="website-form" class="space-y-4">
-                <input type="hidden" name="category" value="website">
-                <div>
-                    <label class="block text-sm font-medium mb-1">Business Name</label>
-                    <input type="text" name="businessName" class="form-input" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Target Audience</label>
-                    <input type="text" name="targetAudience" class="form-input" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Required Features (e.g., e-commerce, blog)</label>
-                    <textarea name="features" rows="4" class="form-input" required></textarea>
-                </div>
-            </form>
+        <!-- Dynamic Questionnaire View -->
+        <div id="questionnaire-view" class="view">
+            <!-- Content will be injected by JavaScript -->
         </div>
 
-        <!-- Telegram Bot Questionnaire View -->
-        <div id="telegram-bot-view" class="view">
-            <button class="back-button" data-target="home-view">← Back</button>
-            <h1 class="view-title">Telegram Bot Questionnaire</h1>
-            <p class="view-subtitle">Help us understand your bot requirements.</p>
-            <form id="telegram-bot-form" class="space-y-4">
-                <input type="hidden" name="category" value="Telegram-bot">
-                <div>
-                    <label class="block text-sm font-medium mb-1">What is the main purpose of the bot?</label>
-                    <input type="text" name="botPurpose" class="form-input" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">List some key commands (e.g., /start, /help)</label>
-                    <input type="text" name="keyCommands" class="form-input" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Does it need to integrate with other services?</label>
-                    <textarea name="integrationNeeds" rows="4" class="form-input" required></textarea>
-                </div>
-            </form>
-        </div>
+        <!-- The other full-form views are now replaced by the dynamic one -->
 
-        <!-- Logo Design Questionnaire View -->
-        <div id="logo-view" class="view">
-            <button class="back-button" data-target="home-view">← Back</button>
-            <h1 class="view-title">Logo Design Questionnaire</h1>
-            <p class="view-subtitle">Describe your vision for the perfect logo.</p>
-            <form id="logo-form" class="space-y-4">
-                <input type="hidden" name="category" value="Logo">
-                <div>
-                    <label class="block text-sm font-medium mb-1">Company Name / Brand Name</label>
-                    <input type="text" name="companyName" class="form-input" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Preferred Colors</label>
-                    <input type="text" name="brandColors" class="form-input" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Style Preference (e.g., modern, classic, minimalist)</label>
-                    <textarea name="stylePreference" rows="4" class="form-input" required></textarea>
-                </div>
-            </form>
-        </div>
-        
-        <!-- This is a placeholder for messages, not a view -->
-        <div id="messageBox" class="message-box"></div>
     </div>
 
     <script>
@@ -203,11 +143,27 @@
             const tg = window.Telegram.WebApp;
             const GAS_URL = 'https://script.google.com/macros/s/AKfycbzdCDW2bArm57Irhhe-_gdZIZDkRQrLgey1PNrgH8SySk-64JXUu2nlu-hHvypGGhA/exec';
             
+            // --- QUESTIONNAIRE DATA ---
+            const questionnaires = {
+                website: [
+                    { name: 'projectName', label: 'What is the name of your business or project?', type: 'text' },
+                    { name: 'projectDescription', label: 'Briefly describe what your business does.', type: 'textarea' },
+                    { name: 'targetAudience', label: 'Who is your target audience?', type: 'text' },
+                    { name: 'primaryGoal', label: 'What is the main goal of this website? (e.g., Sell products, generate leads)', type: 'text' },
+                    { name: 'brandingInfo', label: 'Do you have an existing logo or brand colors?', type: 'text' },
+                    { name: 'requiredFeatures', label: 'Any specific features needed? (e.g., Blog, E-commerce)', type: 'textarea' }
+                ],
+                // You can add 'Telegram-bot' and 'Logo' questions here later
+            };
+
             let currentView = 'home-view';
-            let activeForm = null;
+            let currentQuestionnaire = null;
+            let currentQuestionIndex = 0;
+            let answers = {};
 
             tg.ready();
             tg.expand();
+            tg.MainButton.hide();
 
             function navigateTo(viewId) {
                 const currentViewEl = document.getElementById(currentView);
@@ -217,53 +173,101 @@
                     currentViewEl.classList.add('exit-left');
                     nextViewEl.classList.remove('exit-left');
                     nextViewEl.classList.add('active');
-
-                    setTimeout(() => {
-                        currentViewEl.classList.remove('active');
-                    }, 350);
+                    setTimeout(() => currentViewEl.classList.remove('active'), 350);
                 }
-                
                 currentView = viewId;
-                activeForm = document.querySelector(`#${viewId} form`);
+            }
 
-                if (viewId === 'home-view') {
-                    tg.MainButton.hide();
+            function startQuestionnaire(category) {
+                currentQuestionnaire = questionnaires[category];
+                if (!currentQuestionnaire) {
+                    // Fallback for categories not yet converted to step-by-step
+                    tg.showAlert(`The questionnaire for "${category}" is not yet available.`);
+                    return;
+                }
+                answers = { category: category }; // Reset answers
+                currentQuestionIndex = 0;
+                renderQuestion();
+                navigateTo('questionnaire-view');
+            }
+
+            function renderQuestion() {
+                const qView = document.getElementById('questionnaire-view');
+                if (!currentQuestionnaire) return;
+
+                const question = currentQuestionnaire[currentQuestionIndex];
+                const totalQuestions = currentQuestionnaire.length;
+                const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+
+                let inputHtml;
+                if (question.type === 'textarea') {
+                    inputHtml = `<textarea id="q-input" name="${question.name}" class="form-input" rows="4" required></textarea>`;
                 } else {
-                    tg.MainButton.text = 'SUBMIT';
+                    inputHtml = `<input type="${question.type}" id="q-input" name="${question.name}" class="form-input" required>`;
+                }
+
+                qView.innerHTML = `
+                    <div class="pt-4">
+                        <p class="text-sm text-center" style="color: var(--tg-hint);">Step ${currentQuestionIndex + 1} of ${totalQuestions}</p>
+                        <div class="progress-bar-container"><div class="progress-bar" style="width: ${progress}%;"></div></div>
+                        <div class="question-container mt-8">
+                            <label for="q-input" class="question-label">${question.label}</label>
+                            <form id="question-form">
+                                ${inputHtml}
+                                <button type="submit" class="menu-button next-button">Next →</button>
+                            </form>
+                        </div>
+                    </div>
+                `;
+
+                const form = document.getElementById('question-form');
+                const input = document.getElementById('q-input');
+                input.focus();
+
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    handleNext();
+                });
+
+                // Configure Telegram Main Button for the last question
+                if (currentQuestionIndex === totalQuestions - 1) {
+                    document.querySelector('.next-button').remove(); // Remove HTML next button
+                    tg.MainButton.text = 'SUBMIT ANSWERS';
                     tg.MainButton.show();
+                } else {
+                    tg.MainButton.hide();
                 }
             }
 
-            document.querySelectorAll('.menu-button, .back-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    navigateTo(button.dataset.target);
-                });
-            });
-
-            async function submitFormData() {
-                if (!activeForm) return;
-
-                if (!activeForm.checkValidity()) {
-                    tg.showAlert('Please fill out all fields before submitting.');
+            function handleNext() {
+                const input = document.getElementById('q-input');
+                if (!input.value) {
+                    tg.showAlert('Please provide an answer.');
                     return;
+                }
+                answers[input.name] = input.value;
+                currentQuestionIndex++;
+
+                if (currentQuestionIndex < currentQuestionnaire.length) {
+                    renderQuestion();
+                }
+            }
+            
+            async function submitData() {
+                // Handle submission for the last question
+                const lastInput = document.getElementById('q-input');
+                if (lastInput && !answers[lastInput.name]) {
+                   answers[lastInput.name] = lastInput.value;
                 }
 
                 tg.MainButton.showProgress();
                 tg.MainButton.disable();
 
-                const formData = new FormData(activeForm);
-                const data = Object.fromEntries(formData.entries());
-
-                if (tg.initDataUnsafe.user) {
-                    data.telegram_user_id = tg.initDataUnsafe.user.id;
-                    data.telegram_username = tg.initDataUnsafe.user.username || 'N/A';
-                }
-
                 try {
                     const response = await fetch(GAS_URL, {
                         method: 'POST',
                         redirect: "follow",
-                        body: JSON.stringify(data),
+                        body: JSON.stringify(answers),
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     });
                     const result = await response.json();
@@ -279,7 +283,13 @@
                 }
             }
 
-            tg.MainButton.onClick(submitFormData);
+            document.querySelectorAll('.menu-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    startQuestionnaire(button.dataset.category);
+                });
+            });
+
+            tg.MainButton.onClick(submitData);
         });
     </script>
 </body>
