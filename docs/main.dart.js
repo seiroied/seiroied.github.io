@@ -76663,7 +76663,7 @@ l=A.v(h,g)
 m.a.c.a7(0,new A.adi(l))
 k=A.am(["secret_key","601609516220008517215914534607466485023771876241876813082537344662853442","answers",B.cU.lb(l),"chat_id",m.a.d],h,h)
 s=7
-return A.a_(A.aHJ(A.i8("https://script.google.com/macros/s/AKfycbzd4wIoKN7QrBYB004uXJ1vP2Lex895K8JssynmKaD4QQt9SAT6CV3pJy2McWqZyN0w/exec"),k,A.am(["Content-Type","application/x-www-form-urlencoded"],h,h)).EN(0,B.Cn),$async$v0)
+return A.a_(A.aHJ(A.i8("https://script.google.com/macros/s/AKfycbxX5hjrArRj-tHkBGR7or4dN9wo9NHKA6knSlM1xOD7zwNtggHBlnr__jIkB0pirRuw/exec"),k,A.am(["Content-Type","application/x-www-form-urlencoded"],h,h)).EN(0,B.Cn),$async$v0)
 case 7:j=b
 if(j.b===200){h={}
 h.a=null
