@@ -3,98 +3,140 @@
     "id": "q_company_desc",
     "order": 1,
     "text": "شرکت/سازمان شما چه کاری انجام می‌دهد و محصولات/خدمات اصلی شما چیست؟",
-    "type": "textarea",
-    "required": true,
-    "placeholder": "پاسخ خود را وارد کنید..."
+    "type": "textArea",
+    "placeholder": "پاسخ خود را وارد کنید...",
+    "maxFiles": 0,
+    "maxFileSizeMB": 0
   },
   {
     "id": "q_primary_goals",
     "order": 2,
     "text": "۲-۳ هدف اصلی شما از طراحی این وب‌سایت چیست؟",
-    "type": "textarea",
-    "required": true
+    "type": "textArea",
+    "maxFiles": 0,
+    "maxFileSizeMB": 0
   },
   {
     "id": "q_ideal_visitor",
     "order": 3,
     "text": "بازدیدکننده ایده‌آل شما چه کسی است؟ (سن، شغل، علایق، و سایر ویژگی‌های جمعیتی)",
-    "type": "textarea",
-    "required": false
+    "type": "textArea",
+    "maxFiles": 0,
+    "maxFileSizeMB": 0
   },
   {
     "id": "q_competitors",
     "order": 4,
     "text": "۲-۳ رقیب اصلی خود را که وب‌سایت آن‌ها را تحسین می‌کنید، نام ببرید. چه چیزی را در آن‌ها دوست دارید (یا دوست ندارید)؟",
-    "type": "textarea",
-    "required": false
+    "type": "textArea",
+    "maxFiles": 0,
+    "maxFileSizeMB": 0
   },
   {
     "id": "q_branding_guidelines",
     "order": 5,
     "text": "آیا دستورالعمل‌های برندینگ (رنگ‌ها، فونت‌ها، لوگو) از پیش تعیین‌شده‌ای دارید؟ آیا الهام‌گیری خاصی برای سبک و ظاهر وب‌سایت دارید؟",
-    "type": "textarea",
-    "required": false
+    "type": "textArea",
+    "maxFiles": 0,
+    "maxFileSizeMB": 0
   },
   {
     "id": "q_pages_needed",
     "order": 6,
     "text": "به چه صفحات یا انواع محتوایی نیاز دارید؟",
     "type": "checkboxes",
-    "required": false,
-    "options": ["بلاگ", "خدمات", "تیم", "فرم تماس"]
+    "options": [
+      "بلاگ",
+      "خدمات",
+      "تیم",
+      "فرم تماس"
+    ],
+    "maxFiles": 0,
+    "maxFileSizeMB": 0
   },
   {
     "id": "q_integrations",
     "order": 7,
     "text": "آیا ویژگی‌های خاصی یا سیستم‌های یکپارچه‌سازی‌شده‌ای نیاز دارید؟ (مثلاً سبد خرید، سیستم رزرو، اتصال به CRM)",
-    "type": "textarea",
-    "required": false
+    "type": "textArea",
+    "maxFiles": 0,
+    "maxFileSizeMB": 0
   },
   {
     "id": "q_hosting_domain",
     "order": 8,
     "text": "آیا در حال حاضر هاست، نام دامنه، یا سرویس ایمیل دارید؟",
     "type": "checkboxes",
-    "required": false,
-    "options": ["هاست", "نام دامنه", "سرویس ایمیل"]
+    "options": [
+      "هاست",
+      "نام دامنه",
+      "سرویس ایمیل"
+    ],
+    "maxFiles": 0,
+    "maxFileSizeMB": 0
   },
   {
     "id": "q_budget_timeline",
     "order": 9,
     "text": "محدوده بودجه و زمان‌بندی شما برای راه‌اندازی وب‌سایت چیست؟",
-    "type": "text",
-    "required": false
+    "type": "textArea",
+    "maxFiles": 0,
+    "maxFileSizeMB": 0
   },
   {
     "id": "q_seo_support",
     "order": 10,
     "text": "آیا به پشتیبانی برای SEO، تنظیمات آنالیتیکس یا بازاریابی مداوم نیاز دارید؟",
     "type": "checkboxes",
-    "required": false,
-    "options": ["SEO", "تنظیمات آنالیتیکس", "پشتیبانی بازاریابی"]
+    "options": [
+      "SEO",
+      "تنظیمات آنالیتیکس",
+      "پشتیبانی بازاریابی"
+    ],
+    "maxFiles": 0,
+    "maxFileSizeMB": 0
   },
   {
     "id": "q_content_owner",
     "order": 11,
     "text": "چه کسی پس از راه‌اندازی، محتوا را به‌روزرسانی خواهد کرد؟ آیا به جلسه آموزشی CMS نیاز دارید؟",
-    "type": "textarea",
-    "required": false
+    "type": "textArea",
+    "maxFiles": 0,
+    "maxFileSizeMB": 0
   },
   {
     "id": "q_success_metrics",
     "order": 12,
     "text": "چگونه موفقیت پس از راه‌اندازی وب‌سایت را ارزیابی می‌کنید؟ (مثلاً اهداف ترافیکی، تعداد ارسال فرم، حجم فروش)",
-    "type": "textarea",
-    "required": false
+    "type": "textArea",
+    "maxFiles": 0,
+    "maxFileSizeMB": 0
   },
   {
     "id": "q_upload_samples",
     "order": 13,
     "text": "درصورت تمایل، نمونه فایل طراحی یا لوگو را آپلود کنید",
-    "type": "file",
-    "required": false,
+    "type": "fileUpload",
+    "accept": "[image/*, application/pdf]",
     "maxFiles": 3,
-    "maxFileSizeMB": 50,
-    "accept": ["image/*", "application/pdf"]
+    "maxFileSizeMB": 50
+  },
+  {
+    "id": "آپلود فایل",
+    "order": 14,
+    "text": "آپلود کنید",
+    "type": "fileUpload",
+    "placeholder": "placeholder",
+    "maxFiles": 0,
+    "maxFileSizeMB": 0
+  },
+  {
+    "id": "1755057728403",
+    "order": 15,
+    "text": "SSSSSSS",
+    "type": "fileUpload",
+    "placeholder": "placeholder",
+    "multiple": true,
+    "maxFiles": 10
   }
 ]
