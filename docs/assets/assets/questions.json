@@ -138,5 +138,35 @@
     "placeholder": "placeholder",
     "multiple": true,
     "maxFiles": 10
+  },
+  {
+    "id": "1755103516858",
+    "order": 16,
+    "text": "New question text",
+    "type": "textArea"
+  },
+  {
+    "id": "1755103518027",
+    "order": 17,
+    "text": "New question text",
+    "type": "textArea"
+  },
+  {
+    "id": "1755103518971",
+    "order": 18,
+    "text": "New question text",
+    "type": "textArea"
+  },
+  {
+    "id": "1755103521108",
+    "order": 19,
+    "text": "New question text",
+    "type": "textArea"
+  },
+  {
+    "id": "1755103697482",
+    "order": 20,
+    "text": "New question text",
+    "type": "textArea"
   }
 ]
